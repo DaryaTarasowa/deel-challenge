@@ -6,8 +6,8 @@ const app = require('../src/app');
 const { seed } = require('./seedTestDb');
 
 describe('Contracts API tests', () => {
-  beforeEach(() => {
-    seed();
+  beforeEach(async () => {
+    await seed();
   });
 
   describe('GET /contracts/id', () => {

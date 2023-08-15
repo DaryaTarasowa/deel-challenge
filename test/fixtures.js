@@ -63,6 +63,14 @@ const profiles = [
     balance: 314,
     type: 'contractor',
   },
+  {
+    id: 9,
+    firstName: 'Darya',
+    lastName: 'Tarasova',
+    profession: 'Fighter',
+    balance: 0,
+    type: 'contractor',
+  },
 ];
 
 const contracts = [
@@ -133,31 +141,43 @@ const contracts = [
 
 const jobs = [
   {
+    id: 1,
     description: 'work',
     price: 200,
     ContractId: 1,
   },
   {
+    id: 2,
     description: 'work',
     price: 201,
     ContractId: 2,
   },
   {
+    id: 3,
+    description: 'work',
+    price: 201,
+    ContractId: 2,
+  },
+  {
+    id: 4,
     description: 'work',
     price: 202,
     ContractId: 3,
   },
   {
+    id: 5,
     description: 'work',
     price: 200,
     ContractId: 4,
   },
   {
+    id: 6,
     description: 'work',
     price: 200,
     ContractId: 7,
   },
   {
+    id: 7,
     description: 'work',
     price: 2020,
     paid: true,
@@ -165,6 +185,7 @@ const jobs = [
     ContractId: 7,
   },
   {
+    id: 8,
     description: 'work',
     price: 200,
     paid: true,
@@ -172,6 +193,7 @@ const jobs = [
     ContractId: 2,
   },
   {
+    id: 9,
     description: 'work',
     price: 200,
     paid: true,
@@ -179,6 +201,7 @@ const jobs = [
     ContractId: 3,
   },
   {
+    id: 10,
     description: 'work',
     price: 200,
     paid: true,
@@ -186,6 +209,7 @@ const jobs = [
     ContractId: 1,
   },
   {
+    id: 11,
     description: 'work',
     price: 200,
     paid: true,
@@ -193,6 +217,7 @@ const jobs = [
     ContractId: 5,
   },
   {
+    id: 12,
     description: 'work',
     price: 21,
     paid: true,
@@ -200,6 +225,7 @@ const jobs = [
     ContractId: 1,
   },
   {
+    id: 13,
     description: 'work',
     price: 21,
     paid: true,
@@ -207,6 +233,7 @@ const jobs = [
     ContractId: 2,
   },
   {
+    id: 14,
     description: 'work',
     price: 121,
     paid: true,
@@ -214,11 +241,24 @@ const jobs = [
     ContractId: 3,
   },
   {
+    id: 15,
     description: 'work',
     price: 121,
     paid: true,
     paymentDate: '2020-08-14T23:11:26.737Z',
     ContractId: 3,
+  },
+  {
+    id: 16,
+    description: 'work',
+    price: 555,
+    ContractId: 3,
+  },
+  {
+    id: 17,
+    description: 'work',
+    price: 777,
+    ContractId: 4,
   },
 ];
 

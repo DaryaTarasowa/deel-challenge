@@ -1,8 +1,47 @@
 const Sequelize = require('sequelize');
 
+const { Op } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-class Job extends Sequelize.Model {}
+const { Contract } = sequelize.models;
+
+class Job extends Sequelize.Model {
+  static getUnpaidForUser(profileId) {
+    return this.findAll({
+      include: [
+        {
+          model: Contract,
+          required: true,
+          attributes: [],
+          where: {
+            [Op.and]: {
+              [Op.or]: {
+                clientId: profileId,
+                ContractorId: profileId,
+              },
+              status: { [Op.ne]: 'terminated' },
+            },
+          },
+        },
+      ],
+      where: {
+        paid: null,
+      },
+    });
+  }
+
+  async isUserPermitted(profileId) {
+    const contract = await Contract.findByPk(this.get('ContractId'));
+    return await contract?.isUserPermitted(profileId) ?? false;
+  }
+
+  async pay(profileId) {
+    if (await this.isUserPermitted(profileId)) {
+      return this.get('id');
+    }
+    return null;
+  }
+}
 
 Job.init(
   {

@@ -37,24 +37,24 @@ describe('Contracts API tests', () => {
     it('it should return all not terminated contracts related to user', (done) => {
       request(app)
         .get('/contracts')
-        .set('profile_id', 1)
+        .set('profile_id', 2)
         .expect(200)
         .end((err, res) => {
           const contracts = res.body?.contracts;
-          expect(contracts?.length).equal(1);
-          expect(contracts[0]?.id).equal(2);
+          expect(contracts?.length).equal(2);
+          expect(contracts[0]?.id).equal(3);
+          expect(contracts[1]?.id).equal(4);
           done();
         });
     });
     it('it should correctly work with empty result', (done) => {
       request(app)
         .get('/contracts')
-        .set('profile_id', 1)
+        .set('profile_id', 9)
         .expect(200)
         .end((err, res) => {
           const contracts = res.body?.contracts;
-          expect(contracts?.length).equal(1);
-          expect(contracts[0]?.id).equal(2);
+          expect(contracts?.length).equal(0);
           done();
         });
     });

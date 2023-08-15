@@ -2,7 +2,8 @@
     "env": {
         "browser": true,
         "es2021": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "parserOptions": {
         "ecmaVersion": 9
@@ -22,6 +23,12 @@
                 "functions": false,
                 "classes": true,
                 "variables": true
+            }
+        ],
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": ["test/*.test.js"]
             }
         ]
     }

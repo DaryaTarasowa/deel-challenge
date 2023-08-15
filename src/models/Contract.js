@@ -1,8 +1,30 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 const { sequelize } = require('../config/db');
 
-class Contract extends Sequelize.Model {}
+class Contract extends Sequelize.Model {
+  static getAllForUser(profileId) {
+    return this.findAll({
+      where: {
+        [Op.and]: {
+          [Op.or]: {
+            clientId: profileId,
+            ContractorId: profileId,
+          },
+          status: { [Op.ne]: 'terminated' },
+        },
+      },
+    });
+  }
+
+  isUserPermitted(profileId) {
+    return (
+      this.get('ContractorId') === profileId
+      || this.get('ClientId') === profileId
+    );
+  }
+}
 
 Contract.init(
   {

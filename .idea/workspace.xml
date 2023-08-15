@@ -2,14 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01738e8a-95b8-43e7-ae1b-79c8aeeec41b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/config/db.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/Contract.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/Job.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/Profile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/contracts.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/seedTestDb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/seedDb.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/seedDb.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middleware/getProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/getProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Contract.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Contract.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +44,8 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.standard": "",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "settings.javascript.linters.eslint"
+    "prettierjs.PrettierConfiguration.Package": "/Users/darya.tarasova/.nvm/versions/node/v18.16.0/lib/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.javascript.prettier"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -50,6 +54,9 @@
       <recent name="$PROJECT_DIR$/src/middleware" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/models" />
     </key>
   </component>
@@ -62,7 +69,7 @@
       <option name="presentableId" value="Default" />
       <updated>1692096648938</updated>
       <workItem from="1692096650045" duration="13757000" />
-      <workItem from="1692110817355" duration="781000" />
+      <workItem from="1692110817355" duration="10412000" />
     </task>
     <servers />
   </component>

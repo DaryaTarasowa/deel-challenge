@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-const { Contract } = sequelize.models;
+const { Contract, Profile } = sequelize.models;
 
 class Job extends Sequelize.Model {
   static getUnpaidForUser(profileId) {
@@ -33,13 +33,6 @@ class Job extends Sequelize.Model {
   async isUserPermitted(profileId) {
     const contract = await Contract.findByPk(this.get('ContractId'));
     return await contract?.isUserPermitted(profileId) ?? false;
-  }
-
-  async pay(profileId) {
-    if (await this.isUserPermitted(profileId)) {
-      return this.get('id');
-    }
-    return null;
   }
 }
 

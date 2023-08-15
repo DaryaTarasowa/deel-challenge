@@ -25,4 +25,22 @@ describe('Jobs API tests', () => {
         });
     });
   });
+
+  describe('POST /jobs/job_id/pay', () => {
+    it('it should pay for the job and return an error if tried to ba paid again', (done) => {
+      request(app)
+        .post('/jobs/2/pay')
+        .set('profile_id', 1)
+        .expect(200)
+        .end((err, res) => {
+          const { paidJob, newBalance } = res.body;
+          expect(paidJob.paid).equal(true);
+          expect(newBalance).equal(949);
+          request(app)
+            .post('/jobs/2/pay')
+            .set('profile_id', 1)
+            .expect(400, done);
+        });
+    });
+  });
 });

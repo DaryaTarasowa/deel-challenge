@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { settings } = require('./config/settings');
-const { sequelize, adminFunctions } = require('./model');
+
+const { sequelize } = require('./models/index');
 const { getProfile } = require('./middleware/getProfile');
 const { isAdmin } = require('./middleware/isAdmin');
 
@@ -13,8 +13,6 @@ const app = express();
 app.use(bodyParser.json());
 app.set('sequelize', sequelize);
 app.set('models', sequelize.models);
-
-const { Contract, Job, Profile } = app.get('models');
 
 /** Hardcoding profile_id header for local testing */
 app.use((req, res, next) => {

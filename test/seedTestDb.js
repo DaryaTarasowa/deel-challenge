@@ -1,4 +1,4 @@
-const { Profile, Contract, Job } = require('../src/model');
+const { Profile, Contract, Job } = require('../src/models/index');
 const { profiles, contracts, jobs } = require('./fixtures');
 
 const seed = async () => {

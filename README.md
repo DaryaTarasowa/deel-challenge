@@ -6,7 +6,7 @@ This backend exercise involves building a Node.js/Express.js app that will serve
 
 ## Data Models
 
-> **All models are defined in src/model.js**
+> **All models are defined in src/index.js**
 
 ### Profile
 

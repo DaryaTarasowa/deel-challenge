@@ -1,9 +1,9 @@
-// TODO refactor and remove this file
+// TODO refactor
 
-const { Contract } = require('./models/Contract');
-const { Profile } = require('./models/Profile');
-const { Job } = require('./models/Job');
-const { sequelize } = require('./config/db');
+const { Contract } = require('./Contract');
+const { Profile } = require('./Profile');
+const { Job } = require('./Job');
+const { sequelize } = require('../config/db');
 
 Profile.hasMany(Contract, { as: 'Contractor', foreignKey: 'ContractorId' });
 Contract.belongsTo(Profile, { as: 'Contractor' });

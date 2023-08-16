@@ -1,5 +1,7 @@
-const { Profile, Contract, Job } = require('../src/models');
+const { initModels } = require('../src/models');
 const { profiles, contracts, jobs } = require('./fixtures');
+
+const { Profile, Job, Contract } = initModels();
 
 const seed = async () => {
   // create tables

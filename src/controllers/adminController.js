@@ -30,12 +30,6 @@ async function deposit(req, { depositValue, user }) {
   throw (new Error('Deposit value is too large'));
 }
 
-/**
- *
- * @param req
- * @param res
- * @returns {Promise<{"newBalance": Integer}>}
- */
 exports.depositToUserWithLimit = async (req, res) => {
   const { Profile } = req.app.get('models');
   const { userId } = req.params;
@@ -62,12 +56,6 @@ exports.depositToUserWithLimit = async (req, res) => {
   }
 };
 
-/**
- *
- * @param req
- * @param res
- * @returns {Promise<{"max_payment": Integer, "best_profession": String}>}
- */
 exports.getBestProfession = async (req, res) => {
   const { Job } = req.app.get('models');
 
@@ -84,6 +72,29 @@ exports.getBestProfession = async (req, res) => {
     });
 
     return res.status(200).send(bestProfession);
+  } catch (e) {
+    return res.status(400).send({ message: e.message });
+  }
+};
+
+exports.getBestClients = async (req, res) => {
+  const { Job } = req.app.get('models');
+
+  try {
+    const startDate = new Date(req.query.start);
+    const endDate = new Date(req.query.end);
+    const limit = req.query.limit ?? 2;
+    if (!isValidDate(startDate) || !isValidDate(endDate) || startDate >= endDate) {
+      throw new Error('Invalid date range');
+    }
+
+    const bestClients = await Job.getBestClientForTime({
+      startDate,
+      endDate,
+      limit,
+    });
+
+    return res.status(200).send({ bestClients });
   } catch (e) {
     return res.status(400).send({ message: e.message });
   }

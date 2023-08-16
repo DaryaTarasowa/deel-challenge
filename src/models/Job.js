@@ -56,12 +56,45 @@ module.exports = (sequelize) => {
       return aggregated;
     }
 
+    static getBestClientForTime({ startDate, endDate, limit }) {
+      const { Contract, Profile } = sequelize.models;
+      return this.findAll({
+        attributes: [
+          [sequelize.col('Contract.Client.id'), 'id'],
+          [sequelize.literal("firstName || ' ' || lastName"), 'fullName'],
+          [sequelize.fn('sum', sequelize.col('price')), 'paid'],
+        ],
+        where: {
+          paid: true,
+          paymentDate: { [Op.between]: [startDate, endDate] },
+        },
+        raw: true,
+        order: sequelize.literal('paid DESC'),
+        group: ['Contract.Client.id'],
+        limit,
+        include: [
+          {
+            model: Contract,
+            as: 'Contract',
+            required: true,
+            attributes: [],
+            include: [{
+              model: Profile,
+              as: 'Client',
+              required: true,
+              attributes: [],
+            }],
+          },
+        ],
+      });
+    }
+
     static getBestProfessionForTime({ startDate, endDate }) {
       const { Contract, Profile } = sequelize.models;
       return this.findOne({
         attributes: [
-          [sequelize.fn('sum', sequelize.col('price')), 'max_payment'],
-          [sequelize.col('Contract.Contractor.profession'), 'best_profession'],
+          [sequelize.fn('sum', sequelize.col('price')), 'maxPayment'],
+          [sequelize.col('Contract.Contractor.profession'), 'bestProfession'],
         ],
         where: {
           paid: true,
@@ -69,7 +102,7 @@ module.exports = (sequelize) => {
         },
         raw: true,
         group: ['profession'],
-        order: sequelize.literal('max_payment DESC'),
+        order: sequelize.literal('maxPayment DESC'),
         limit: 1,
         include: [
           {

@@ -2,8 +2,8 @@ const request = require('supertest');
 
 const { expect } = require('chai');
 
-const app = require('../src/app');
-const { seed } = require('./seedTestDb');
+const app = require('../../src/app');
+const { seed } = require('../seedTestDb');
 
 describe('Contracts API tests', () => {
   beforeEach(async () => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { sequelize } = require('./models/index');
+const { sequelize } = require('./models');
 const { getProfile } = require('./middleware/getProfile');
 const { isAdmin } = require('./middleware/isAdmin');
 

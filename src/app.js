@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { sequelize } = require('./model');
+const { settings } = require('./config/settings');
+const { sequelize, adminFunctions } = require('./model');
 const { getProfile } = require('./middleware/getProfile');
 const { isAdmin } = require('./middleware/isAdmin');
 
@@ -10,7 +11,6 @@ app.set('sequelize', sequelize);
 app.set('models', sequelize.models);
 
 const { Contract, Job, Profile } = app.get('models');
-const DEPOSIT_UPPER_LIMIT = 0.25;
 
 app.use((req, res, next) => {
   req.headers.profile_id = req.headers?.profile_id ?? 1;
@@ -18,12 +18,12 @@ app.use((req, res, next) => {
 });
 
 app.use('/balances', (req, res, next) => {
-  req.headers.is_admin = req.headers?.is_admin ?? true;
+  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 0 : req.headers.is_admin;
   next();
 });
 
 app.use('/admin', (req, res, next) => {
-  req.headers.is_admin = req.headers?.is_admin ?? true;
+  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 0 : req.headers.is_admin;
   next();
 });
 
@@ -63,44 +63,19 @@ app.post('/jobs/:jobId/pay', getProfile, async (req, res) => {
   }
 });
 
-app.post('/balances/depositTransaction/:userId', isAdmin, async (req, res) => {
-  const { userId } = req.params;
-  const depositValue = req.body?.depositValue ?? 5;
-  const user = await Profile.findByPk(userId);
-
-  try {
-    const newValue = await sequelize.transaction(async (t) => {
-      const totalDueAggregation = await Job.getUnpaidMoneyTotalForClient(userId, t);
-      const totalDue = totalDueAggregation[0].total_price;
-
-      const isAbleToDeposit = depositValue < totalDue * DEPOSIT_UPPER_LIMIT;
-      if (isAbleToDeposit) {
-        return user.deposit(depositValue, t);
-      }
-      throw (new Error('Deposit value is too large'));
-    });
-
-    return res.status(200).send({ userId, newValue });
-  } catch (e) {
-    return res.status(400).send({ message: e.message });
-  }
-});
-
 app.post('/balances/deposit/:userId', isAdmin, async (req, res) => {
   const { userId } = req.params;
-  const depositValue = req.body?.depositValue ?? 5;
+  const depositValue = req.body?.depositValue;
   const user = await Profile.findByPk(userId);
-
+  if (!user) {
+    return res.status(400).send({ message: 'User does not exist' });
+  }
   try {
-    const unpaidJobs = await Job.getUnpaidForUser(userId);
-    const totalDue = unpaidJobs.reduce((acc, job) => acc + job.get('price'), 0);
+    const newBalance = settings.useTransactionsForDeposit
+      ? await adminFunctions.depositTransaction({ depositValue, user })
+      : await adminFunctions.deposit({ depositValue, user });
 
-    const isAbleToDeposit = depositValue < totalDue * DEPOSIT_UPPER_LIMIT;
-    if (isAbleToDeposit) {
-      const newBalance = await user.deposit(depositValue, null);
-      return res.status(200).send({ newBalance });
-    }
-    throw (new Error('Deposit value is too large'));
+    return res.status(200).send({ newBalance });
   } catch (e) {
     return res.status(400).send({ message: e.message });
   }

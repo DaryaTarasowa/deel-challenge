@@ -25,13 +25,13 @@ app.use((req, res, next) => {
 
 /** Hardcoding is_admin header for local testing */
 app.use('/balances', (req, res, next) => {
-  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 0 : req.headers.is_admin;
+  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 1 : req.headers.is_admin;
   next();
 });
 
 /** Hardcoding is_admin header for local testing */
 app.use('/admin', (req, res, next) => {
-  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 0 : req.headers.is_admin;
+  req.headers.is_admin = typeof req.headers?.is_admin === 'undefined' ? 1 : req.headers.is_admin;
   next();
 });
 
@@ -44,5 +44,7 @@ app.get('/jobs/unpaid', getProfile, jobController.getUnpaidJobsForUser);
 app.post('/jobs/:jobId/pay', getProfile, jobController.payJobWithValidation);
 
 app.post('/balances/deposit/:userId', isAdmin, adminController.depositToUserWithLimit);
+
+app.get('/admin/best-profession', isAdmin, adminController.getBestProfession);
 
 module.exports = app;

@@ -56,6 +56,38 @@ module.exports = (sequelize) => {
       return aggregated;
     }
 
+    static getBestProfessionForTime({ startDate, endDate }) {
+      const { Contract, Profile } = sequelize.models;
+      return this.findOne({
+        attributes: [
+          [sequelize.fn('sum', sequelize.col('price')), 'max_payment'],
+          [sequelize.col('Contract.Contractor.profession'), 'best_profession'],
+        ],
+        where: {
+          paid: true,
+          paymentDate: { [Op.between]: [startDate, endDate] },
+        },
+        raw: true,
+        group: ['profession'],
+        order: sequelize.literal('max_payment DESC'),
+        limit: 1,
+        include: [
+          {
+            model: Contract,
+            as: 'Contract',
+            required: true,
+            attributes: [],
+            include: [{
+              model: Profile,
+              as: 'Contractor',
+              required: true,
+              attributes: [],
+            }],
+          },
+        ],
+      });
+    }
+
     async isUserPermitted(profileId) {
       const { Contract } = sequelize.models;
       const contract = await Contract.findByPk(this.get('ContractId'));

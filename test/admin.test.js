@@ -57,4 +57,60 @@ describe('Admin API tests', () => {
         });
     });
   });
+
+  describe('GET /admin/getBestProfession', () => {
+    it('it should return error message if no date provided', (done) => {
+      request(app)
+        .get('/admin/best-profession')
+        .set('is_admin', 1)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).equal('Invalid date range');
+          done();
+        });
+    });
+    it('it should return correct result with correct date range', (done) => {
+      request(app)
+        .get('/admin/best-profession?start=2020-08-10&end=2020-08-17')
+        .set('is_admin', 1)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.best_profession).equal('Programmer');
+          expect(res.body.max_payment).equal(2683);
+          done();
+        });
+    });
+    it('it should return correct result with correct date range', (done) => {
+      request(app)
+        .get('/admin/best-profession?start=2020-08-10&end=2020-08-14')
+        .set('is_admin', 1)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.best_profession).equal('Musician');
+          expect(res.body.max_payment).equal(21);
+          done();
+        });
+    });
+    it('it should return error with incorrect date range', (done) => {
+      request(app)
+        .get('/admin/best-profession?start=2020-08-1000&end=2020-08-17')
+        .set('is_admin', 1)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).equal('Invalid date range');
+          done();
+        });
+    });
+
+    it('it should return error if a start larger than an end', (done) => {
+      request(app)
+        .get('/admin/best-profession?start=2020-08-17&&end=2020-08-10')
+        .set('is_admin', 1)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).equal('Invalid date range');
+          done();
+        });
+    });
+  });
 });

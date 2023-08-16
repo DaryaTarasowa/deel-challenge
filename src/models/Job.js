@@ -14,13 +14,11 @@ class Job extends Sequelize.Model {
           required: true,
           attributes: [],
           where: {
-            [Op.and]: {
-              [Op.or]: {
-                clientId: profileId,
-                ContractorId: profileId,
-              },
-              status: { [Op.ne]: 'terminated' },
+            [Op.or]: {
+              clientId: profileId,
+              ContractorId: profileId,
             },
+            status: { [Op.ne]: 'terminated' },
           },
         },
       ],
@@ -30,9 +28,48 @@ class Job extends Sequelize.Model {
     });
   }
 
+  static async getUnpaidMoneyTotalForClient(clientId, t) {
+    const aggregated = await this.findAll(
+      {
+        attributes: [
+          [sequelize.fn('sum', sequelize.col('price')), 'total_price'],
+        ],
+        raw: true,
+        where: {
+          paid: null,
+        },
+        include: [
+          {
+            model: Contract,
+            required: true,
+            attributes: [],
+            where: {
+              clientId,
+              status: { [Op.ne]: 'terminated' },
+            },
+          },
+        ],
+      },
+      { transaction: t },
+    );
+    return aggregated;
+  }
+
   async isUserPermitted(profileId) {
     const contract = await Contract.findByPk(this.get('ContractId'));
-    return await contract?.isUserPermitted(profileId) ?? false;
+    return contract?.isUserPermitted(profileId);
+  }
+
+  async getContractor() {
+    const contract = await Contract.findByPk(this.get('ContractId'));
+    const contractorId = contract.get('ContractorId');
+    return Profile.findByPk(contractorId);
+  }
+
+  async getClient() {
+    const contract = await Contract.findByPk(this.get('ContractId'));
+    const clientId = contract.get('ClientId');
+    return Profile.findByPk(clientId);
   }
 }
 

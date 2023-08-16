@@ -27,15 +27,16 @@ describe('Jobs API tests', () => {
   });
 
   describe('POST /jobs/job_id/pay', () => {
-    it('it should pay for the job and return an error if tried to ba paid again', (done) => {
+    it('it should pay for the job and return an error if tried to pay again', (done) => {
       request(app)
         .post('/jobs/2/pay')
         .set('profile_id', 1)
         .expect(200)
         .end((err, res) => {
-          const { paidJob, newBalance } = res.body;
-          expect(paidJob.paid).equal(true);
-          expect(newBalance).equal(949);
+          const { job, clientBalance, contractorBalance } = res.body;
+          expect(job.paid).equal(true);
+          expect(clientBalance).equal(949);
+          expect(contractorBalance).equal(1415);
           request(app)
             .post('/jobs/2/pay')
             .set('profile_id', 1)

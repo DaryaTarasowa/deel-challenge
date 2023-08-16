@@ -2,9 +2,13 @@ const Sequelize = require('sequelize');
 
 const { sequelize } = require('../config/db');
 
-const { Job } = sequelize.models;
-
 class Profile extends Sequelize.Model {
+  async deposit(depositValue, t) {
+    const newBalance = this.get('balance') + depositValue;
+    await this.update({ balance: newBalance }, t ? { transaction: t } : null);
+    return this.get('balance');
+  }
+
   async isAbleToPay(job) {
     const isPermitted = await job.isUserPermitted(this.get('id'));
     const isUnpaid = !job.get('paid');
@@ -13,19 +17,22 @@ class Profile extends Sequelize.Model {
   }
 
   async pay(job) {
-    if (job && await this.isAbleToPay(job)) {
-      const balanceToBe = this.get('balance') - job.get('price');
-      const result = await sequelize.transaction(async (t) => {
-        await this.update({ balance: balanceToBe }, { transaction: t });
-        await job.update({
-          paid: 1,
-          paymentDate: Date.now(),
-        }, { transaction: t });
-        return { job, balance: this.get('balance') };
-      });
-      return result;
-    }
-    throw (new Error('Job can not be paid'));
+    const contractor = await job.getContractor();
+    const isAbleToProceed = job && contractor && await this.isAbleToPay(job);
+    if (!isAbleToProceed) throw (new Error('Job can not be paid'));
+
+    const price = job.get('price');
+    const clientBalanceToBe = this.get('balance') - price;
+    const contractorBalanceToBe = contractor.get('balance') + price;
+    return sequelize.transaction(async (t) => {
+      await this.update({ balance: clientBalanceToBe }, { transaction: t });
+      await contractor.update({ balance: contractorBalanceToBe }, { transaction: t });
+      await job.update({
+        paid: 1,
+        paymentDate: Date.now(),
+      }, { transaction: t });
+      return { job, clientBalance: this.get('balance'), contractorBalance: contractor.get('balance') };
+    });
   }
 }
 
